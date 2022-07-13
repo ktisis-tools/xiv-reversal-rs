@@ -1,0 +1,16 @@
+[package]
+name = "ktisis"
+version = "0.1.0"
+
+[lib]
+name = "ktisis_internal"
+crate-type = ["cdylib"]
+
+[[bin]]
+name = "ktisis_pose"
+path = "src/exe/main.rs"
+
+[dependencies]
+winapi = { version = "^0.3.9", features = ["std", "everything"] }
+libc = { version = "^0.2.126", features = ["use_std", "extra_traits"] }
+dll-syringe = { version = "^0.13.1", features = ["into-x86-from-x64"] }
