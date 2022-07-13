@@ -3,8 +3,8 @@
 use std::{
 	mem,
 	ptr::null,
-	os::windows::ffi::OsStringExt,
 	collections::HashMap,
+	os::windows::ffi::OsStringExt,
 	ffi::{
 		OsString,
 		c_void
@@ -27,8 +27,10 @@ use winapi::um::{
 	winnt::HANDLE
 };
 
-use process::Module;
-use memory::MemRegion;
+use process::{
+	Module,
+	MemRegion
+};
 
 // Process
 
@@ -47,7 +49,7 @@ impl Process {
 		let base = unsafe { GetModuleHandleW(null()) } as _;
 		let modules = Self::get_modules(pid);
 		
-		let proc_mod = modules.values().find(|mod| mod.memory.base == base).unwrap();
+		let proc_mod = modules.values().find(|x| x.memory.base == base).unwrap();
 		let memory = MemRegion::new(base, proc_mod.memory.size);
 
 		Self {
@@ -68,7 +70,7 @@ impl Process {
 		let mut entry: MODULEENTRY32W = unsafe { mem::zeroed() };
 		entry.dwSize = mem::size_of::<MODULEENTRY32W>() as _;
 
-		while unsafe { Module32NextW(handle, &mut entry) } != {
+		while unsafe { Module32NextW(handle, &mut entry) } != 0 {
 			if let Ok(name) = OsString::from_wide(&entry.szModule).into_string() {
 				let module = Module::new(
 					entry.hModule,
@@ -79,6 +81,6 @@ impl Process {
 			}
 		}
 
-		return module;
+		return modules;
 	}
 }
