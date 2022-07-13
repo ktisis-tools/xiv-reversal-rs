@@ -1,7 +1,13 @@
 // Dependencies
 
+use std::ffi::CString;
+
 use winapi::{
-	shared::minwindef::HMODULE
+	um::libloaderapi::GetProcAddress,
+	shared::minwindef::{
+		HMODULE,
+		FARPROC
+	}
 };
 
 use libc::c_void;
@@ -25,5 +31,18 @@ impl Module {
 		}
 	}
 
-	// TODO: Exports
+	pub fn get_export(&mut self, name: &str) -> Option<FARPROC> {
+		let proc = unsafe {
+			GetProcAddress(
+				self.handle,
+				CString::new(name).unwrap().as_bytes_with_nul().as_ptr() as *const _
+			)
+		};
+
+		if proc.is_null() {
+			None
+		} else {
+			Some(proc)
+		}
+	}
 }

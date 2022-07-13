@@ -66,18 +66,25 @@ impl Process {
 
 		let handle = unsafe { CreateTH32(TH32CS_SNAPMODULE, pid) };
 		assert!(handle != INVALID_HANDLE_VALUE, "TH32 returned invalid handle.");
-
+		
 		let mut entry: MODULEENTRY32W = unsafe { mem::zeroed() };
 		entry.dwSize = mem::size_of::<MODULEENTRY32W>() as _;
 
 		while unsafe { Module32NextW(handle, &mut entry) } != 0 {
 			if let Ok(name) = OsString::from_wide(&entry.szModule).into_string() {
+				let name = name.trim_matches('\0').trim().to_string();
+
+				if modules.contains_key(&name) {
+					continue;
+				}
+
 				let module = Module::new(
 					entry.hModule,
 					entry.modBaseAddr as _,
 					entry.modBaseSize as _
 				);
-				modules.insert(name.trim_matches('\0').trim().to_string(), module);
+
+				modules.insert(name, module);
 			}
 		}
 
