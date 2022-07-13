@@ -3,6 +3,7 @@
 // Modules
 
 mod process;
+use process::Process;
 
 // Dpeendnecies
 
@@ -45,7 +46,17 @@ fn dll_attach(_lpv: LPVOID) {
 		SetConsoleTitleA("Debug Console\0".as_ptr() as *const _);
 	}
 
-	println!("Attached to process.");
+	let process = Process::get();
+
+	println!(
+		"Attached to process.\n\
+		- PID: {}\n\
+		- Address space: {:x?} - 0x{:x?} (size of 0x{:x?})",
+		process.pid,
+		process.memory.base,
+		process.memory.base as usize + process.memory.size,
+		process.memory.size
+	);
 }
 
 fn dll_detach(lpv: LPVOID) {
