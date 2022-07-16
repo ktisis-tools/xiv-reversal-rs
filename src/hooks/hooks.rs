@@ -4,6 +4,7 @@ use winapi::um::memoryapi::VirtualProtect;
 
 // Hooks
 
+#[derive(Clone, Debug)]
 pub struct Hooks {
 	pub vhooks: Vec<VHook>
 }
@@ -20,12 +21,22 @@ impl Hooks {
 			VirtualProtect(handle as _, 0x1, 0x40, &mut 0x20);
 			*handle as _
 		};
-		VHook { handle, original, hook }
+		
+		let vhook = VHook { handle, original, hook };
+		self.vhooks.push(vhook);
+		return vhook;
+	}
+
+	pub fn disable_all(&mut self) {
+		for vhook in &self.vhooks {
+			vhook.disable();
+		}
 	}
 }
 
 // VHook
 
+#[derive(Copy, Clone, Debug)]
 pub struct VHook {
 	pub handle: *mut usize,
 	pub original: *const usize,

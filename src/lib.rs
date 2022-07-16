@@ -46,13 +46,21 @@ use winapi::shared::minwindef::{
 	LPVOID
 };
 
+// Global
+
+static mut HOOKS: Option<Hooks> = None;
+
 // DLL attachment
 
 fn dll_attach(_lpv: LPVOID) {
+	// Init console
+
 	unsafe {
 		AllocConsole();
 		SetConsoleTitleA("Debug Console\0".as_ptr() as *const _);
 	}
+
+	// Get process
 
 	let process = Process::get();
 
@@ -66,7 +74,13 @@ fn dll_attach(_lpv: LPVOID) {
 		process.memory.size
 	);
 
-	let mut hooks = Hooks::new();
+	// Init hooks
+
+	use std::borrow::BorrowMut;
+
+	unsafe {
+		HOOKS = Some(Hooks::new());
+	}
 
 	let device = Device::from(&process);
 	let sc = device.SwapChain();
@@ -75,6 +89,9 @@ fn dll_attach(_lpv: LPVOID) {
 
 fn dll_detach(lpv: LPVOID) {
 	unsafe {
+		if let Some(hooks) = &mut HOOKS {
+			hooks.disable_all();
+		}
 		FreeConsole();
 		FreeLibraryAndExitThread(lpv as _, 1);
 	}
