@@ -4,7 +4,7 @@ use winapi::um::memoryapi::VirtualProtect;
 
 // Hooks
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub struct Hooks {
 	pub vhooks: Vec<VHook>
 }

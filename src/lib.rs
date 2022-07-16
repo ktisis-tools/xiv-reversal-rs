@@ -3,15 +3,13 @@
 // Modules
 
 mod memory;
+use memory::Hooks;
 
 mod process;
 use process::Process;
 
 mod d3d11;
 use d3d11::Device;
-
-mod hooks;
-use hooks::Hooks;
 
 // Dpeendnecies
 
