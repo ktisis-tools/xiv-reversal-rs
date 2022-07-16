@@ -12,7 +12,7 @@ use winapi::{
 
 use libc::c_void;
 
-use process::MemRegion;
+use memory::MemRegion;
 
 // Module
 

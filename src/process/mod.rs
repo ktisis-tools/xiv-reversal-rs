@@ -1,8 +1,5 @@
-pub mod memory;
-pub use self::memory::MemRegion;
-
-pub mod module;
+mod module;
 pub use self::module::Module;
 
-pub mod process;
+mod process;
 pub use self::process::Process;

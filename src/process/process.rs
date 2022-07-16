@@ -27,10 +27,8 @@ use winapi::um::{
 	winnt::HANDLE
 };
 
-use process::{
-	Module,
-	MemRegion
-};
+use process::Module;
+use memory::MemRegion;
 
 // Process
 

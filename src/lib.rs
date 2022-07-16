@@ -2,8 +2,13 @@
 
 // Modules
 
+mod memory;
+
 mod process;
 use process::Process;
+
+mod modules;
+use modules::Dxgi;
 
 // Dpeendnecies
 
@@ -12,10 +17,7 @@ extern crate libc;
 
 use std::{
 	ptr::null_mut,
-	mem::transmute,
-	panic::catch_unwind,
-	ffi::c_void,
-	mem
+	panic::catch_unwind
 };
 
 use winapi::um::{
@@ -41,8 +43,6 @@ use winapi::shared::minwindef::{
 	LPVOID
 };
 
-use winapi::shared::windef::{POINT, LPPOINT};
-
 // DLL attachment
 
 fn dll_attach(_lpv: LPVOID) {
@@ -51,7 +51,7 @@ fn dll_attach(_lpv: LPVOID) {
 		SetConsoleTitleA("Debug Console\0".as_ptr() as *const _);
 	}
 
-	let mut process = Process::get();
+	let process = Process::get();
 
 	println!(
 		"Attached to process.\n\
