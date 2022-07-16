@@ -66,7 +66,7 @@ fn dll_attach(_lpv: LPVOID) {
 	);
 
 	let device = d3d11::Device::from(&process);
-	println!("{:#x?}", device);
+	println!("{:#x?}", device.D3DFeatureLevel());
 }
 
 fn dll_detach(lpv: LPVOID) {
