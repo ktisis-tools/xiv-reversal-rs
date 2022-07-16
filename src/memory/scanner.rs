@@ -1,7 +1,6 @@
 // Dependencies
 
 use libc::c_void;
-use std::str::from_utf8;
 
 use memory::MemRegion;
 

@@ -8,6 +8,10 @@ mod process;
 use process::Process;
 
 mod d3d11;
+use d3d11::Device;
+
+mod hooks;
+use hooks::Hooks;
 
 // Dpeendnecies
 
@@ -61,6 +65,12 @@ fn dll_attach(_lpv: LPVOID) {
 		process.memory.base as usize + process.memory.size,
 		process.memory.size
 	);
+
+	let mut hooks = Hooks::new();
+
+	let device = Device::from(&process);
+	let sc = device.SwapChain();
+	let vtable = memory::VTable::new(sc.DXGISwapChain() as _);
 }
 
 fn dll_detach(lpv: LPVOID) {

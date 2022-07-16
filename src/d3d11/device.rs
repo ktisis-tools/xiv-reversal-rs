@@ -42,7 +42,7 @@ impl Device {
 		unsafe { self.region.read(offset as isize) }
 	}
 
-	pub fn getSwapChain(&self) -> SwapChain {
+	pub fn SwapChain(&self) -> SwapChain {
 		SwapChain::new( *self.get(_Offset::SwapChain) )
 	}
 }

@@ -1,6 +1,6 @@
 // VTable
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 pub struct VTable {
 	pub handle: *const usize,
 	pub methods: usize
