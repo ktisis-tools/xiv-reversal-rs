@@ -10,6 +10,11 @@ use d3d11::SwapChain;
 // Device
 // https://github.com/aers/FFXIVClientStructs/blob/main/FFXIVClientStructs/FFXIV/Client/Graphics/Kernel/Device.cs
 
+#[repr(u16)]
+enum _VTable {
+	SwapChain = 0x58
+}
+
 #[derive(Debug)]
 pub struct Device {
 	pub region: MemRegion
@@ -33,7 +38,11 @@ impl Device {
 		}
 	}
 
-	pub fn D3DFeatureLevel(&self) -> i32 {
-		unsafe { *self.region.read(0x1E8) }
+	pub fn get<T>(&self, offset: _VTable) -> &T {
+		unsafe { self.region.read(offset as isize) }
+	}
+
+	pub fn SwapChain(&self) -> SwapChain {
+		SwapChain::new( *self.get(_VTable::SwapChain) )
 	}
 }
