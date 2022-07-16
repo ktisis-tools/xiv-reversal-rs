@@ -2,7 +2,7 @@
 
 use libc::c_void;
 
-use memory::MemRegion;
+use memory::{MemRegion, VTable};
 
 // SwapChain
 
@@ -36,7 +36,20 @@ impl SwapChain {
 		*self.get(_Offset::Height)
 	}
 
-	pub fn DXGISwapChain(&self) -> *mut c_void {
-		*self.get(_Offset::DXGISwapChain)
+	pub fn DXGISwapChain(&self) -> DXGISwapChain {
+		DXGISwapChain::new( *self.get(_Offset::DXGISwapChain) )
+	}
+}
+
+// DXGISwapChain - possibly dead code?
+
+pub struct DXGISwapChain {
+	pub inner: VTable
+}
+
+impl DXGISwapChain {
+	pub fn new(handle: *const usize) -> Self {
+		let inner = VTable::new(handle);
+		Self { inner }
 	}
 }

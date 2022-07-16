@@ -4,15 +4,20 @@ use libc::c_void;
 
 use memory::MemRegion;
 use process::Process;
-
 use d3d11::SwapChain;
+
+use winapi::um::d3d11::{
+	ID3D11Device,
+	ID3D11DeviceVtbl
+};
 
 // Device
 // https://github.com/aers/FFXIVClientStructs/blob/main/FFXIVClientStructs/FFXIV/Client/Graphics/Kernel/Device.cs
 
 #[repr(u16)]
 enum _Offset {
-	SwapChain = 0x58
+	SwapChain = 0x58,
+	D3D11Forwarder = 0x200
 }
 
 #[derive(Debug)]
@@ -44,5 +49,9 @@ impl Device {
 
 	pub fn SwapChain(&self) -> SwapChain {
 		SwapChain::new( *self.get(_Offset::SwapChain) )
+	}
+
+	pub fn D3D11Forwarder(&self) -> &ID3D11Device {
+		*self.get(_Offset::D3D11Forwarder)
 	}
 }

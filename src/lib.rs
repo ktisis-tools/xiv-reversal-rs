@@ -11,6 +11,8 @@ use process::Process;
 mod d3d11;
 use d3d11::Device;
 
+mod hooks;
+
 // Dpeendnecies
 
 extern crate winapi;
@@ -78,11 +80,8 @@ fn dll_attach(_lpv: LPVOID) {
 
 	unsafe {
 		HOOKS = Some(Hooks::new());
+		hooks::init(HOOKS.as_mut().unwrap(), &process);
 	}
-
-	let device = Device::from(&process);
-	let sc = device.SwapChain();
-	let vtable = memory::VTable::new(sc.DXGISwapChain() as _);
 }
 
 fn dll_detach(lpv: LPVOID) {
