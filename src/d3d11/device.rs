@@ -11,7 +11,7 @@ use d3d11::SwapChain;
 // https://github.com/aers/FFXIVClientStructs/blob/main/FFXIVClientStructs/FFXIV/Client/Graphics/Kernel/Device.cs
 
 #[repr(u16)]
-enum _VTable {
+enum _Offset {
 	SwapChain = 0x58
 }
 
@@ -38,11 +38,11 @@ impl Device {
 		}
 	}
 
-	pub fn get<T>(&self, offset: _VTable) -> &T {
+	fn get<T>(&self, offset: _Offset) -> &T {
 		unsafe { self.region.read(offset as isize) }
 	}
 
-	pub fn SwapChain(&self) -> SwapChain {
-		SwapChain::new( *self.get(_VTable::SwapChain) )
+	pub fn getSwapChain(&self) -> SwapChain {
+		SwapChain::new( *self.get(_Offset::SwapChain) )
 	}
 }

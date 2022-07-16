@@ -7,9 +7,6 @@ mod memory;
 mod process;
 use process::Process;
 
-mod modules;
-use modules::Dxgi;
-
 mod d3d11;
 
 // Dpeendnecies

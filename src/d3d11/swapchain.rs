@@ -7,7 +7,7 @@ use memory::MemRegion;
 // SwapChain
 
 #[repr(u16)]
-enum _VTable {
+enum _Offset {
 	Width = 0x38,
 	Height = 0x3C,
 	DXGISwapChain = 0x68
@@ -24,19 +24,19 @@ impl SwapChain {
 		Self { region }
 	}
 
-	pub fn get<T>(&self, offset: _VTable) -> &T {
+	fn get<T>(&self, offset: _Offset) -> &T {
 		unsafe { self.region.read(offset as isize) }
 	}
 
 	pub fn Width(&self) -> u32 {
-		*self.get(_VTable::Width)
+		*self.get(_Offset::Width)
 	}
 
 	pub fn Height(&self) -> u32 {
-		*self.get(_VTable::Height)
+		*self.get(_Offset::Height)
 	}
 
 	pub fn DXGISwapChain(&self) -> *mut c_void {
-		*self.get(_VTable::DXGISwapChain)
+		*self.get(_Offset::DXGISwapChain)
 	}
 }
