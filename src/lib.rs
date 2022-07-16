@@ -10,6 +10,8 @@ use process::Process;
 mod modules;
 use modules::Dxgi;
 
+mod d3d11;
+
 // Dpeendnecies
 
 extern crate winapi;
@@ -62,6 +64,9 @@ fn dll_attach(_lpv: LPVOID) {
 		process.memory.base as usize + process.memory.size,
 		process.memory.size
 	);
+
+	let device = d3d11::Device::from(&process);
+	println!("{:#x?}", device);
 }
 
 fn dll_detach(lpv: LPVOID) {

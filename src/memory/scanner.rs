@@ -16,7 +16,7 @@ impl SigScanner {
 		Self { region }
 	}
 
-	pub unsafe fn scan_bytes(&self, bytes: &[Option<u8>]) -> Option<*mut c_void> {
+	pub unsafe fn scan_bytes(&self, bytes: &[Option<u8>]) -> Option<*mut c_void> { // cursed
 		let len = bytes.len();
 		
 		'a: for i in 0 .. (self.region.size as usize - len) {
