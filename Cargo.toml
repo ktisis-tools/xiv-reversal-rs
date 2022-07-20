@@ -1,13 +1,14 @@
 [package]
-name = "ktisis"
+name = "gpose-plus"
 version = "0.1.0"
 
 [lib]
-name = "ktisis_internal"
+name = "gpose_plus"
+path = "src/dllmain.rs"
 crate-type = ["cdylib"]
 
 [[bin]]
-name = "ktisis_pose"
+name = "Ktisis"
 path = "src/exe/main.rs"
 
 [dependencies]
