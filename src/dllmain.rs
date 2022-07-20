@@ -3,19 +3,20 @@
 // Modules & Crates
 
 mod process;
-use process::*;
-
 mod memory;
-use memory::*;
-
 mod d3d11;
-use d3d11::*;
-
+mod render;
 mod hooks;
-use hooks::*;
-
 mod ktisis;
-use ktisis::*;
+
+use {
+	process::*,
+	memory::*,
+	d3d11::*,
+	render::*,
+	hooks::*,
+	ktisis::*
+};
 
 extern crate libc;
 extern crate winapi;

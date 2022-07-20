@@ -1,7 +1,7 @@
 # Ktisis/GPose+
 
 This project is a learning exercise in Reverse Engineering and DirectX rendering.
-It is a plugin for the game that runs via code injection.
+It runs via code injection.
 
 The end goal is to expand the features of FFXIV's Group Pose mode and provide a workspace for posers.
 
@@ -28,6 +28,6 @@ Finally, this tool is not intended to be a competitor to CMTool or Anamnesis. My
 
 ## Special Thanks
 
-- The developers from [Goat Corp](https://github.com/goatcorp) and [XIV Tools](https://github.com/XIV-Tools), whose existing work provided excellent insight into internal memory and data structures.
+- The developers from [Goat Corp](https://github.com/goatcorp) and [XIV Tools](https://github.com/XIV-Tools), whose existing work in this area provided excellent insight into internal memory and data structures.
+- [@Fayti1703](https://github.com/Fayti1703) and [@hackmud-dtr](https://github.com/hackmud-dtr) for their helpful insights into reverse engineering and low-level code, and overall helpfulness in answering questions.
 - [@ry00001](https://github.com/ry00001) for their helpful insights into developing with Rust and general support.
-- [@Fayti1703](https://github.com/Fayti1703) and [@hackmud-dtr](https://github.com/hackmud-dtr) for their helpful insights into reverse engineering and low-level code, and overall helpfulness in answering questionss.
