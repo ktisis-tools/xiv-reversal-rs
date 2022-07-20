@@ -4,11 +4,13 @@ use libc::c_void;
 
 use memory::MemRegion;
 use process::Process;
-use d3d11::SwapChain;
 
-use winapi::um::d3d11::{
-	ID3D11Device,
-	ID3D11DeviceVtbl
+use winapi::{
+	um::d3d11::{
+		ID3D11Device,
+		ID3D11DeviceContext
+	},
+	shared::dxgi::IDXGISwapChain
 };
 
 // Device
@@ -16,8 +18,9 @@ use winapi::um::d3d11::{
 
 #[repr(u16)]
 enum _Offset {
-	SwapChain = 0x58,
-	D3D11Forwarder = 0x200
+	IDXGISwapChain = 0x58,
+	D3D11Forwarder = 0x200,
+	D3D11DeviceContext = 0x208
 }
 
 #[derive(Debug)]
@@ -47,11 +50,15 @@ impl Device {
 		unsafe { self.region.read(offset as isize) }
 	}
 
-	pub fn SwapChain(&self) -> SwapChain {
-		SwapChain::new( *self.get(_Offset::SwapChain) )
+	pub fn get_swapchain(&self) -> &IDXGISwapChain {
+		*self.get(_Offset::IDXGISwapChain)
 	}
 
-	pub fn D3D11Forwarder(&self) -> &ID3D11Device {
+	pub fn get_device(&self) -> &ID3D11Device {
 		*self.get(_Offset::D3D11Forwarder)
+	}
+
+	pub fn get_context(&self) -> &ID3D11DeviceContext {
+		*self.get(_Offset::D3D11DeviceContext)
 	}
 }

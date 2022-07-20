@@ -15,8 +15,9 @@ mod hooks;
 
 // Dpeendnecies
 
-extern crate winapi;
 extern crate libc;
+extern crate winapi;
+extern crate directx_math;
 
 use std::{
 	ptr::null_mut,
@@ -75,8 +76,6 @@ fn dll_attach(_lpv: LPVOID) {
 	);
 
 	// Init hooks
-
-	use std::borrow::BorrowMut;
 
 	unsafe {
 		HOOKS = Some(Hooks::new());
