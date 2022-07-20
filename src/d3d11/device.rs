@@ -2,7 +2,7 @@
 
 use libc::c_void;
 
-use memory::MemRegion;
+use memory::{MemRegion, VTable};
 use process::Process;
 
 use winapi::{
@@ -19,6 +19,7 @@ use winapi::{
 #[repr(u16)]
 enum _Offset {
 	IDXGISwapChain = 0x58,
+	SwapChainVTable = 0x68,
 	D3D11Forwarder = 0x200,
 	D3D11DeviceContext = 0x208
 }
@@ -52,6 +53,11 @@ impl Device {
 
 	pub fn get_swapchain(&self) -> &IDXGISwapChain {
 		*self.get(_Offset::IDXGISwapChain)
+	}
+	pub fn get_swapchain_vt(&self) -> VTable {
+		let sc_handle: *mut c_void = *self.get(_Offset::IDXGISwapChain);
+		let vt_handle: *const usize = unsafe { *( sc_handle.offset(_Offset::SwapChainVTable as isize) as *const _ ) };
+		VTable::new(vt_handle)
 	}
 
 	pub fn get_device(&self) -> &ID3D11Device {

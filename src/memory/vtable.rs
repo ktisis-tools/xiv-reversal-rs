@@ -28,7 +28,7 @@ impl VTable {
 
 	pub fn nth(self, index: isize) -> *const usize {
 		unsafe {
-			self.raw_vtable().offset(index).read() as *const usize
+			self.raw_vtable().offset(index).read() as _
 		}
 	}
 }
