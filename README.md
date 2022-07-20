@@ -1,7 +1,7 @@
 # Ktisis/GPose+
 
 This project is a learning exercise in Reverse Engineering and DirectX rendering.
-It is a mod for the game that runs via code injection.
+It is a plugin for the game that runs via code injection.
 
 The end goal is to expand the features of FFXIV's Group Pose mode and provide a workspace for posers.
 
@@ -18,8 +18,16 @@ If you're interested in reaching out about this project, please feel free to con
 - Timeline editor for rudimentary animation
 - Placement and rendering of 3D props in-game
 
-#### Disclaimers
+## Disclaimers
 
 As a note, I'm fully aware that this project, at least in its current scope, can be created as a [Dalamud](https://github.com/goatcorp/Dalamud) plugin. However, I would like to continue developing it as-is to maximise my own learning and skills development. If possible, I will likely look at porting functionality to a Dalamud plugin in future.
 
 Additionally, due to some unknown funkiness, the DLL injector will only work with an instance of the game launched via [XIVQuickLauncher](https://github.com/goatcorp/FFXIVQuickLauncher). I'm not sure why, and haven't yet looked in-depth to find out why.
+
+Finally, this tool is not intended to be a competitor to CMTool or Anamnesis. My focus is not to replicate the functionality of either, but to instead fill its own niche, whatever that may be.
+
+## Special Thanks
+
+- The developers from [Goat Corp](https://github.com/goatcorp) and [XIV Tools](https://github.com/XIV-Tools), whose existing work provided excellent insight into internal memory and data structures.
+- [@ry00001](https://github.com/ry00001) for their helpful insights into developing with Rust and general support.
+- [@Fayti1703](https://github.com/Fayti1703) and [@hackmud-dtr](https://github.com/hackmud-dtr) for their helpful insights into reverse engineering and low-level code, and overall helpfulness in answering questionss.

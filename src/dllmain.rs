@@ -1,55 +1,60 @@
 #![feature(abi_thiscall)]
 
-// Modules
-
-mod memory;
-use memory::Hooks;
+// Modules & Crates
 
 mod process;
-use process::Process;
+use process::*;
+
+mod memory;
+use memory::*;
 
 mod d3d11;
-use d3d11::Device;
+use d3d11::*;
 
 mod hooks;
+use hooks::*;
 
-// Dpeendnecies
+mod ktisis;
+use ktisis::*;
 
 extern crate libc;
 extern crate winapi;
 extern crate directx_math;
+
+// Dpeendnecies
 
 use std::{
 	ptr::null_mut,
 	panic::catch_unwind
 };
 
-use winapi::um::{
-	processthreadsapi::CreateThread,
-	libloaderapi::{
-		DisableThreadLibraryCalls,
-		FreeLibraryAndExitThread
+use winapi::{
+	um::{
+		processthreadsapi::CreateThread,
+		libloaderapi::{
+			DisableThreadLibraryCalls,
+			FreeLibraryAndExitThread
+		},
+		winnt::{
+			DLL_PROCESS_ATTACH,
+			DLL_PROCESS_DETACH
+		},
+		wincon::{
+			FreeConsole,
+			SetConsoleTitleA
+		},
+		consoleapi::AllocConsole
 	},
-	winnt::{
-		DLL_PROCESS_ATTACH,
-		DLL_PROCESS_DETACH
-	},
-	wincon::{
-		FreeConsole,
-		SetConsoleTitleA
-	},
-	consoleapi::AllocConsole
-};
-
-use winapi::shared::minwindef::{
-	HINSTANCE,
-	DWORD,
-	LPVOID
+	shared::minwindef::{
+		HINSTANCE,
+		DWORD,
+		LPVOID
+	}
 };
 
 // Global
 
-static mut HOOKS: Option<Hooks> = None;
+static mut KTISIS: Option<Ktisis> = None;
 
 // DLL attachment
 
@@ -75,18 +80,18 @@ fn dll_attach(_lpv: LPVOID) {
 		process.memory.size
 	);
 
-	// Init hooks
-
+	// Init
+	
 	unsafe {
-		HOOKS = Some(Hooks::new());
-		hooks::init(HOOKS.as_mut().unwrap(), &process);
+		KTISIS = Some( Ktisis::new(process) );
+		KTISIS.as_mut().unwrap().init();
 	}
 }
 
 fn dll_detach(lpv: LPVOID) {
 	unsafe {
-		if let Some(hooks) = &mut HOOKS {
-			hooks.disable_all();
+		if let Some(ktisis) = &mut KTISIS {
+			ktisis.hooks.disable_all();
 		}
 		FreeConsole();
 		FreeLibraryAndExitThread(lpv as _, 1);
