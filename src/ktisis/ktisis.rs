@@ -18,13 +18,13 @@ pub struct Ktisis {
 impl Ktisis {
 	pub fn new(process: Process) -> Self {
 		let hooks = Hooks::new();
-		let overlay = Overlay::new();
+		let overlay = Overlay::new(&process);
 
 		Self { process, hooks, overlay }
 	}
 
 	pub fn init(&mut self) {
-		hooks::init(&mut self.hooks, &self.process);
 		self.overlay.init();
+		hooks::init(&mut self.hooks, &self.process);
 	}
 }

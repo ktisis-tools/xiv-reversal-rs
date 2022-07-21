@@ -29,41 +29,19 @@ const VIEWPORT_CT: usize = 1;
 
 // RenderContext
 
-pub struct RenderContext {
+pub struct Renderer {
 	// do these need to be pointers? revisit this
 	pub swapchain: *const IDXGISwapChain,
 	pub device: *const ID3D11Device,
 	pub shaders: Option<Shaders>,
-	viewports: [D3D11_VIEWPORT; VIEWPORT_CT]
+	viewports: [D3D11_VIEWPORT; VIEWPORT_CT] // TODO: Convert to Vec?
 }
 
-impl RenderContext {
+impl Renderer {
+	// Constructors
+
 	pub fn new(swapchain: *const IDXGISwapChain, device: *const ID3D11Device, shaders: Option<Shaders>) -> Self {
-		// Dereference args & get context
-		
-		let (sc, dev) = unsafe { (&*swapchain, &*device) };
-		let devcon = Device::get_context_from(dev);
-
-		// Get viewports
-		// TODO: Aspect ratio
-
 		let mut viewports = unsafe { [ zeroed() ] };
-		unsafe {
-			devcon.RSGetViewports(&mut (VIEWPORT_CT as u32), viewports.as_mut_ptr());
-		}
-
-		// Create render target
-
-		let mut back_buf: *mut c_void = null_mut();
-		let mut rtv: *mut ID3D11RenderTargetView = null_mut();
-
-		unsafe {
-			sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
-			dev.CreateRenderTargetView(back_buf as _, null_mut(), &mut rtv);
-		}
-
-		// Construct render context
-
 		Self { swapchain, device, shaders, viewports }
 	}
 
@@ -73,9 +51,34 @@ impl RenderContext {
 		Self::new(sc, dev, None)
 	}
 
-	pub fn get_context(&self) -> &mut ID3D11DeviceContext {
-		unsafe { Device::get_context_from(&*self.device) }
+	// Init values
+
+	pub fn init(&mut self) -> &mut Self {
+		// Dereference args & get context
+		
+		let (sc, dev) = unsafe { (&*self.swapchain, &*self.device) };
+		let devcon = Device::get_context_from(dev);
+
+		// Assign back buffer and render target pointers
+
+		let mut back_buf: *mut c_void = null_mut();
+		let mut rtv: *mut ID3D11RenderTargetView = null_mut();
+
+		unsafe {
+			// Get viewports
+			devcon.RSGetViewports(&mut (VIEWPORT_CT as u32), self.viewports.as_mut_ptr());
+
+			// Create render target
+			sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
+			dev.CreateRenderTargetView(back_buf as _, null_mut(), &mut rtv);
+		}
+
+		// TODO: Build projection matrix
+
+		self
 	}
+
+	// Render
 
 	pub unsafe fn render(&self) {
 		let devcon = self.get_context();
@@ -90,5 +93,11 @@ impl RenderContext {
 			devcon.IASetInputLayout(shaders.v_input);
 		}
 		devcon.RSSetViewports(VIEWPORT_CT as u32, self.viewports.as_ptr());
+	}
+
+	// Get device context
+
+	pub fn get_context(&self) -> &mut ID3D11DeviceContext {
+		unsafe { Device::get_context_from(&*self.device) }
 	}
 }

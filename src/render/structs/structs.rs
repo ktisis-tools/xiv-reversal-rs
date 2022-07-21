@@ -1,4 +1,4 @@
-// Structs
+// Vector
 
 #[derive(Copy, Clone)]
 #[repr(C)]
@@ -13,6 +13,8 @@ impl Vec3 {
 	}
 }
 
+// Color
+
 #[derive(Copy, Clone)]
 #[repr(C)]
 pub struct Rgba {
@@ -26,6 +28,8 @@ impl Rgba {
 		Self { r, g, b, a }
 	}
 }
+
+// Vertex
 
 #[derive(Copy, Clone)]
 #[repr(C)]
