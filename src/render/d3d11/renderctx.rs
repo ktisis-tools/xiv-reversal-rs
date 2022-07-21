@@ -1,7 +1,6 @@
 // Dependencies
 
-use Device;
-use super::shaders::Shaders; // ?
+use d3d11::{Device, Shaders};
 
 use libc::c_void;
 use std::{
@@ -43,7 +42,7 @@ impl RenderContext {
 		// Dereference args & get context
 		
 		let (sc, dev) = unsafe { (&*swapchain, &*device) };
-		let devcon = Self::_device_ctx(dev);
+		let devcon = Device::get_context_from(dev);
 
 		// Get viewports
 		// TODO: Aspect ratio
@@ -74,15 +73,8 @@ impl RenderContext {
 		Self::new(sc, dev, None)
 	}
 
-	fn _device_ctx(device: &ID3D11Device) -> &mut ID3D11DeviceContext {
-		let mut devcon: *mut ID3D11DeviceContext = null_mut();
-		unsafe {
-			(*device).GetImmediateContext(&mut devcon);
-			&mut *devcon
-		}
-	}
 	pub fn get_context(&self) -> &mut ID3D11DeviceContext {
-		unsafe { Self::_device_ctx(&*self.device) }
+		unsafe { Device::get_context_from(&*self.device) }
 	}
 
 	pub unsafe fn render(&self) {

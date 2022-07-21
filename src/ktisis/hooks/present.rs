@@ -1,8 +1,10 @@
 // Dependencies
 
-use Process;
-use Device;
-use Hooks;
+use process::{
+	Process,
+	memory::Hooks
+};
+use render::d3d11::Device;
 
 use winapi::{
 	um::winnt::HRESULT,

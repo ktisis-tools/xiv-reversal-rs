@@ -5,6 +5,8 @@ use libc::c_void;
 use memory::{MemRegion, VTable};
 use process::Process;
 
+use std::ptr::null_mut;
+
 use winapi::{
 	um::d3d11::{
 		ID3D11Device,
@@ -66,5 +68,13 @@ impl Device {
 
 	pub fn get_context(&self) -> &ID3D11DeviceContext {
 		*self.get(_Offset::D3D11DeviceContext)
+	}
+
+	pub fn get_context_from(device: &ID3D11Device) -> &mut ID3D11DeviceContext {
+		let mut devcon: *mut ID3D11DeviceContext = null_mut();
+		unsafe {
+			device.GetImmediateContext(&mut devcon);
+			&mut *devcon
+		}
 	}
 }

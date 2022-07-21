@@ -1,3 +1,5 @@
+pub mod d3d11;
+
 mod structs;
 pub use self::structs::*;
 

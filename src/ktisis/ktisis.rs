@@ -1,10 +1,11 @@
 // Dependencies
 
-use process::Process;
-use memory::Hooks;
-use hooks;
-
+use process::{
+	Process,
+	memory::Hooks
+};
 use render::Overlay;
+use ktisis::hooks;
 
 // Ktisis
 
