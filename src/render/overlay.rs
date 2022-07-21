@@ -7,7 +7,11 @@ pub struct Overlay {
 }
 
 impl Overlay {
-	pub fn new() {
+	pub fn new() -> Self {
+		Self {}
+	}
+
+	pub fn init(&mut self) {
 
 	}
 }

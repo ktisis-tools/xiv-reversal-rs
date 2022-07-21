@@ -30,4 +30,4 @@ Finally, this tool is not intended to be a competitor to CMTool or Anamnesis. My
 
 - The developers from [Goat Corp](https://github.com/goatcorp) and [XIV Tools](https://github.com/XIV-Tools), whose existing work in this area provided excellent insight into internal memory and data structures.
 - [@Fayti1703](https://github.com/Fayti1703) and [@hackmud-dtr](https://github.com/hackmud-dtr) for their helpful insights into reverse engineering and low-level code, and overall helpfulness in answering questions.
-- [@ry00001](https://github.com/ry00001) for their helpful insights into developing with Rust and general support.
+- [@BobTheBob9](https://github.com/BobTheBob9) for their helpful insights into reverse engineering, and assistance in setting up and learning to use IDA.

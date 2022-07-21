@@ -4,5 +4,5 @@ pub use self::device::Device;
 mod shaders;
 pub use self::shaders::Shaders;
 
-mod render;
-pub use self::render::RenderContext;
+mod renderctx;
+pub use self::renderctx::RenderContext;

@@ -11,7 +11,7 @@ fn main() {
 		println!("Injecting into process...");
 
 		let syringe = Syringe::for_process(target);
-		if let Err(err) = syringe.inject("ktisis_internal.dll") {
+		if let Err(err) = syringe.inject("gpose_plus.dll") {
 			println!("Injection failed: {err}");
 		} else {
 			println!("Success");
