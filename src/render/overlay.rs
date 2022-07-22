@@ -30,13 +30,17 @@ pub struct Overlay {
 }
 
 impl Overlay {
+	// Constructor
+
 	pub fn new(process: &Process) -> Self {
 		let device = Device::from(&process);
 		let renderer = Renderer::from(device);
 		Self { renderer }
 	}
 
-	pub fn init(&mut self) {
+	// Init
+
+	pub fn init(&mut self) { // could use direct2d?
 		// Init renderer
 
 		let mut r = self.renderer.init();
@@ -73,5 +77,11 @@ impl Overlay {
 		r.shaders = Some(unsafe {
 			Shaders::from_src(&*r.device, SHADER, Some("VS"), Some("PS"), v_input)
 		});
+	}
+
+	// Draw
+
+	pub fn draw(&self) {
+		unsafe { self.renderer.render(); }
 	}
 }

@@ -43,7 +43,6 @@ impl Shaders {
 
 		unsafe { 
 			// Compile vertex shader
-
 			if let Some(v_entry) = v_entry {
 				if let Ok(blob) = Self::compile(src, v_entry, "vs_5_0") {
 					let blob = &*blob;
@@ -53,8 +52,7 @@ impl Shaders {
 			}
 
 			// Compile pixel shader
-
-			if let Some(p_entry) = v_entry {
+			if let Some(p_entry) = p_entry {
 				if let Ok(blob) = Self::compile(src, p_entry, "ps_5_0") {
 					let blob = &*blob;
 					device.CreatePixelShader(blob.GetBufferPointer(), blob.GetBufferSize(), null_mut(), &mut shaders.p_shader);

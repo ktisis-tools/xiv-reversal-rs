@@ -25,6 +25,6 @@ impl Ktisis {
 
 	pub fn init(&mut self) {
 		self.overlay.init();
-		hooks::init(&mut self.hooks, &self.process);
+		hooks::init(self);
 	}
 }

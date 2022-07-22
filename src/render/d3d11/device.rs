@@ -54,12 +54,12 @@ impl Device {
 	}
 
 	pub fn get_swapchain(&self) -> &IDXGISwapChain {
-		*self.get(_Offset::IDXGISwapChain)
+		let sc_handle: *mut c_void = *self.get(_Offset::IDXGISwapChain);
+		let vt_handle: *const IDXGISwapChain = unsafe { *( sc_handle.offset(_Offset::SwapChainVTable as isize) as *const _ ) };
+		unsafe { &*vt_handle }
 	}
 	pub fn get_swapchain_vt(&self) -> VTable {
-		let sc_handle: *mut c_void = *self.get(_Offset::IDXGISwapChain);
-		let vt_handle: *const usize = unsafe { *( sc_handle.offset(_Offset::SwapChainVTable as isize) as *const _ ) };
-		VTable::new(vt_handle)
+		VTable::new( self.get_swapchain() as *const _ as _ )
 	}
 
 	pub fn get_device(&self) -> &ID3D11Device {
@@ -77,4 +77,8 @@ impl Device {
 			&mut *devcon
 		}
 	}
+
+	/*pub fn debug_sc(&self) -> SwapChain {
+		SwapChain::new( *self.get(_Offset::SwapChain) )
+	}*/
 }

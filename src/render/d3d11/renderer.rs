@@ -1,6 +1,7 @@
 // Dependencies
 
 use d3d11::{Device, Shaders};
+use Shape;
 
 use libc::c_void;
 use std::{
@@ -19,7 +20,10 @@ use winapi::{
 			ID3D11Texture2D,
 			D3D11_VIEWPORT
 		},
-		d3dcommon::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST
+		d3dcommon::{
+			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP
+		}
 	}
 };
 
@@ -34,7 +38,8 @@ pub struct Renderer {
 	pub swapchain: *const IDXGISwapChain,
 	pub device: *const ID3D11Device,
 	pub shaders: Option<Shaders>,
-	viewports: [D3D11_VIEWPORT; VIEWPORT_CT] // TODO: Convert to Vec?
+	viewports: [D3D11_VIEWPORT; VIEWPORT_CT], // TODO: Convert to Vec?
+	rtv: *mut ID3D11RenderTargetView
 }
 
 impl Renderer {
@@ -42,7 +47,8 @@ impl Renderer {
 
 	pub fn new(swapchain: *const IDXGISwapChain, device: *const ID3D11Device, shaders: Option<Shaders>) -> Self {
 		let mut viewports = unsafe { [ zeroed() ] };
-		Self { swapchain, device, shaders, viewports }
+		let rtv = null_mut();
+		Self { swapchain, device, shaders, viewports, rtv }
 	}
 
 	pub fn from(_device: Device) -> Self {
@@ -62,15 +68,13 @@ impl Renderer {
 		// Assign back buffer and render target pointers
 
 		let mut back_buf: *mut c_void = null_mut();
-		let mut rtv: *mut ID3D11RenderTargetView = null_mut();
-
 		unsafe {
 			// Get viewports
-			devcon.RSGetViewports(&mut (VIEWPORT_CT as u32), self.viewports.as_mut_ptr());
+			devcon.RSGetViewports(&mut 1, self.viewports.as_mut_ptr());
 
 			// Create render target
-			sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
-			dev.CreateRenderTargetView(back_buf as _, null_mut(), &mut rtv);
+			let getbuf = sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
+			dev.CreateRenderTargetView(back_buf as _, null_mut(), &mut self.rtv);
 		}
 
 		// TODO: Build projection matrix
@@ -83,16 +87,18 @@ impl Renderer {
 	pub unsafe fn render(&self) {
 		let devcon = self.get_context();
 
-		devcon.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-
-		// todo: render here
+		devcon.OMSetRenderTargets(1, &self.rtv, null_mut());
+		devcon.RSSetViewports(VIEWPORT_CT as u32, self.viewports.as_ptr());
 
 		if let Some(shaders) = &self.shaders {
 			devcon.VSSetShader(shaders.v_shader, null_mut(), 0);
 			devcon.PSSetShader(shaders.p_shader, null_mut(), 0);
 			devcon.IASetInputLayout(shaders.v_input);
 		}
-		devcon.RSSetViewports(VIEWPORT_CT as u32, self.viewports.as_ptr());
+
+		// Render
+
+		devcon.IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	}
 
 	// Get device context

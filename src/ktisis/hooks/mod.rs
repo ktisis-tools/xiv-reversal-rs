@@ -4,9 +4,8 @@ mod present;
 
 // Init
 
-use memory::Hooks;
-use process::Process;
+use Ktisis;
 
-pub fn init(hooks: &mut Hooks, process: &Process) {
-	self::present::init(hooks, process);
+pub fn init(ktisis: &mut Ktisis) {
+	self::present::init(ktisis);
 }

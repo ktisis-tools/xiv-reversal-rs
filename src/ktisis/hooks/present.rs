@@ -1,10 +1,17 @@
 // Dependencies
 
+use Ktisis;
+
 use process::{
 	Process,
 	memory::Hooks
 };
-use render::d3d11::Device;
+use render::{
+	Overlay,
+	d3d11::Device
+};
+
+use std::mem::transmute;
 
 use winapi::{
 	um::winnt::HRESULT,
@@ -16,6 +23,8 @@ use winapi::{
 type Present = unsafe extern "stdcall" fn(*mut IDXGISwapChain, u32, u32) -> HRESULT;
 static mut ORIGIN: Option<Present> = None;
 
+static mut KTISIS: Option<*mut Ktisis> = None;
+
 // Present
 
 unsafe extern "stdcall" fn present(
@@ -23,6 +32,11 @@ unsafe extern "stdcall" fn present(
 	sync_interval: u32,
 	flags: u32
 ) -> HRESULT {
+	if let Some(ktisis) = KTISIS {
+		let ktisis = &*ktisis;
+		ktisis.overlay.draw();
+	}
+	
 	if let Some(call) = &ORIGIN {
 		call(swap_chain, sync_interval, flags)
 	} else { 0 }
@@ -30,8 +44,8 @@ unsafe extern "stdcall" fn present(
 
 // Init hook
 
-pub fn init(hooks: &mut Hooks, process: &Process) {
-	let device = Device::from(&process);
+pub fn init(ktisis: &mut Ktisis) {
+	let device = Device::from(&ktisis.process);
 	let sc = device.get_swapchain();
 	let dev = device.get_device();
 
@@ -39,12 +53,14 @@ pub fn init(hooks: &mut Hooks, process: &Process) {
 
 	// this needs to be more intuitive
 	unsafe {
-		let present_fn = std::mem::transmute::<_, Present>(
+		KTISIS = Some(ktisis);
+
+		let present_fn = transmute::<_, Present>(
 			sc_vt.nth(8)
 		);
 		ORIGIN = Some(present_fn);
 		
-		let hook = hooks.hook_vt(
+		let hook = ktisis.hooks.hook_vt(
 			sc_vt.raw_vtable().offset(8) as *mut usize,
 			present as _
 		);
