@@ -16,6 +16,7 @@ If you're interested in reaching out about this project, please feel free to con
 
 #### Features that I would like to explore, but are not currently a priority:
 - Timeline editor for rudimentary animation
+- Creation of additional actors and editing
 - Placement and rendering of 3D props in-game
 
 ## Disclaimers
