@@ -46,7 +46,6 @@ unsafe extern "stdcall" fn present(
 
 pub fn init(ktisis: &mut Ktisis) {
 	let device = Device::from(&ktisis.process);
-	let sc = device.get_swapchain();
 	let dev = device.get_device();
 
 	let sc_vt = device.get_swapchain_vt();

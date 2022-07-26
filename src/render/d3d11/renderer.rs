@@ -21,7 +21,7 @@ use winapi::{
 			D3D11_VIEWPORT
 		},
 		d3dcommon::{
-			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+			//D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
 			D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP
 		}
 	}
@@ -46,7 +46,7 @@ impl Renderer {
 	// Constructors
 
 	pub fn new(swapchain: *const IDXGISwapChain, device: *const ID3D11Device, shaders: Option<Shaders>) -> Self {
-		let mut viewports = unsafe { [ zeroed() ] };
+		let viewports = unsafe { [ zeroed() ] };
 		let rtv = null_mut();
 		Self { swapchain, device, shaders, viewports, rtv }
 	}
@@ -73,7 +73,7 @@ impl Renderer {
 			devcon.RSGetViewports(&mut 1, self.viewports.as_mut_ptr());
 
 			// Create render target
-			let getbuf = sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
+			sc.GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
 			dev.CreateRenderTargetView(back_buf as _, null_mut(), &mut self.rtv);
 		}
 

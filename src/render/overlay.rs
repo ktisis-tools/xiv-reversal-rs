@@ -13,7 +13,7 @@ use winapi::{
 		D3D11_APPEND_ALIGNED_ELEMENT
 	},
 	shared::dxgiformat::{
-		DXGI_FORMAT_R32_UINT, // keep note of this.
+		//DXGI_FORMAT_R32_UINT, // keep note of this.
 		DXGI_FORMAT_R32G32B32A32_FLOAT,
 		DXGI_FORMAT_R32G32B32_FLOAT
 	}

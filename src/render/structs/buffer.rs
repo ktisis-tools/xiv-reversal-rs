@@ -10,7 +10,7 @@ use std::{
 use winapi::{
 	shared::dxgiformat::DXGI_FORMAT_R32_UINT,
 	um::{
-		d3dcommon::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
+		//d3dcommon::D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST,
 		d3d11::{
 			ID3D11Buffer,
 			ID3D11Device,

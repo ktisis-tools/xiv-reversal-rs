@@ -38,15 +38,10 @@ impl Device {
 	}
 
 	pub fn from(process: &Process) -> Self {
-		let handle = process.memory.scanner()
-		.scan("48 8B 0D ?? ?? ?? ?? 48 8D 54 24 ?? F3 0F 10 44 24")
-		.unwrap();
+		let res = process.memory.scanner()
+		.scan("48 8B 0D ?? ?? ?? ?? 48 8D 54 24 ?? F3 0F 10 44 24");
 
-		unsafe {
-			let asm_ptr = *(handle.add(0x3) as *const u32);
-			let ptr = handle.offset(asm_ptr as isize + 0x7) as *const usize;
-			Self::new(*ptr as _)
-		}
+		Self::new(res.asm_ptr())
 	}
 
 	fn get<T>(&self, offset: _Offset) -> &T {
@@ -77,8 +72,4 @@ impl Device {
 			&mut *devcon
 		}
 	}
-
-	/*pub fn debug_sc(&self) -> SwapChain {
-		SwapChain::new( *self.get(_Offset::SwapChain) )
-	}*/
 }

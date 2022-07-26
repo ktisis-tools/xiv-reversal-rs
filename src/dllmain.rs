@@ -1,13 +1,16 @@
 #![feature(abi_thiscall)]
+#![feature(trait_alias)]
 
 // Modules & Crates
 
 mod process;
 mod render;
+mod ffxiv;
 mod ktisis;
 use {
 	process::*,
 	render::*,
+	ffxiv::*,
 	ktisis::*
 };
 
