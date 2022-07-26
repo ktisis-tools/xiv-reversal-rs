@@ -103,8 +103,7 @@ impl SigScanResult {
 
 		unsafe {
 			let asm_ptr = *(self.ptr.add(offset) as *const u32);
-			let ptr = self.ptr.add(asm_ptr as usize + offset*2 + 1) as *const usize;
-			*ptr as _
+			self.ptr.add(asm_ptr as usize + offset*2 + 1)
 		}
 	}
 }

@@ -39,9 +39,10 @@ impl Device {
 
 	pub fn from(process: &Process) -> Self {
 		let res = process.memory.scanner()
-		.scan("48 8B 0D ?? ?? ?? ?? 48 8D 54 24 ?? F3 0F 10 44 24");
+		.scan("48 8B 0D ?? ?? ?? ?? 48 8D 54 24 ?? F3 0F 10 44 24")
+		.asm_ptr();
 
-		Self::new(res.asm_ptr())
+		Self::new(unsafe { *(res as *mut *mut _) })
 	}
 
 	fn get<T>(&self, offset: _Offset) -> &T {
