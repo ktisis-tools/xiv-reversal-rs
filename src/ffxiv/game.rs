@@ -7,19 +7,24 @@ use std::{
 
 use crate::{
 	ActorTable,
+	Camera,
 	Process
 };
+
+use super::actors::ModelDataPath;
 
 // Game Interface
 
 pub struct GameInterface {
-	actor_table: ActorTable
+	actor_table: ActorTable,
+	camera: Camera
 }
 
 impl GameInterface {
 	pub fn new() -> Self {
 		Self {
-			actor_table: ActorTable::new()
+			actor_table: ActorTable::new(),
+			camera: Camera::default()
 		}
 	}
 
@@ -28,9 +33,9 @@ impl GameInterface {
 
 		let mut actor = &mut self.actor_table.get_all()[0];
 		println!("{:x?}", *actor as *const _ as *const usize);
-		println!("{:#x?}", actor);
-		actor.set_scale(1.0);
-		actor.redraw_sync();
-		println!("{:?}", actor.scale());
+		println!("{:#x?}", actor); 
+		let model = actor.get_model();
+		println!("{:#?}", model);
+		//actor.redraw_sync();
 	}
 }

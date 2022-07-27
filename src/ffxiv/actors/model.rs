@@ -1,10 +1,13 @@
 // Dependnecies
 
+use crate::Vec3;
+
 use std::ffi::c_void;
 
 // Enums
 
 #[repr(u16)]
+#[derive(Copy, Clone, Debug)]
 pub enum ModelDataPath {
 	MidlanderMasc = 101,
 	MidlanderMascChild = 104,
@@ -39,7 +42,29 @@ pub enum ModelDataPath {
 #[struct_layout::explicit(size = 0x93c, align = 4)]
 #[derive(Copy, Clone, Debug)]
 pub struct ActorModel {
-
+	#[field(offset = 0x148, get, set)]
+	pub bust: *mut BustScale,
+	#[field(offset = 0x26c, get, set)]
+	pub height: f32,
+	#[field(offset = 0x2b0, get, set)]
+	pub wetness: f32,
+	#[field(offset = 0x2bc, get, set)]
+	pub drenched: f32,
+	#[field(offset = 0x938, get, set)]
+	pub data_path: ModelDataPath
 }
 
-impl ActorModel {}
+impl ActorModel {
+	pub fn get_bust(&self) -> &mut BustScale {
+		unsafe { &mut *self.bust() }
+	}
+}
+
+// BustScale
+
+#[struct_layout::explicit(size = 0x93c, align = 4)]
+#[derive(Copy, Clone, Debug)]
+pub struct BustScale {
+	#[field(offset = 0x68, get, set)]
+	scale: Vec3
+}

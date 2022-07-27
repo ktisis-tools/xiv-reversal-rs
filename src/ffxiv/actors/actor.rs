@@ -64,6 +64,10 @@ pub struct Actor {
 }
 
 impl Actor {
+	pub fn get_model(&self) -> &mut ActorModel {
+		unsafe { &mut *self.model() }
+	}
+
 	// Get name
 
 	pub fn get_name(&self) -> String {

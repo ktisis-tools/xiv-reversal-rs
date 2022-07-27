@@ -1,7 +1,7 @@
 // Vector
 // TODO: Proc macros
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Default)]
 #[repr(C)]
 pub struct Vec2 {
 	pub x: f32,
@@ -13,7 +13,7 @@ impl Vec2 {
 	}
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug, Default)]
 #[repr(C)]
 pub struct Vec3 {
 	pub x: f32,
