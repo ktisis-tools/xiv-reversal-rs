@@ -1,9 +1,9 @@
 // Dependencies
 
-use null_mut;
+use std::ptr::null_mut;
 use libc::c_void;
 
-use memory::MemRegion;
+use crate::memory::MemRegion;
 
 // SigScanner
 
@@ -45,7 +45,7 @@ impl SigScanner {
 		let bytes_str: Vec<&str> = text.split(" ").collect();
 
 		let bytes: Vec<Option<u8>> = bytes_str.into_iter().map(|x| {
-			if x == "??" {
+			if x == "?" || x == "??" {
 				None
 			} else {
 				Some(u8::from_str_radix(x, 16).unwrap())

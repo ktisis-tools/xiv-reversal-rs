@@ -1,6 +1,3 @@
-#![feature(abi_thiscall)]
-#![feature(trait_alias)]
-
 // Modules & Crates
 
 mod process;
@@ -13,10 +10,6 @@ use {
 	ffxiv::*,
 	ktisis::*
 };
-
-extern crate libc;
-extern crate winapi;
-extern crate directx_math;
 
 // Dpeendnecies
 

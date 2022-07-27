@@ -1,7 +1,9 @@
 // Dependencies
 
-use d3d11::{Device, Shaders};
-use Shape;
+use crate::{
+	Shape,
+	d3d11::{Device, Shaders}
+};
 
 use libc::c_void;
 use std::{

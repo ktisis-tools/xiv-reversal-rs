@@ -1,6 +1,6 @@
 // Dependencies
 
-use Vertex;
+use crate::Vertex;
 
 use std::{
 	ptr::null_mut,

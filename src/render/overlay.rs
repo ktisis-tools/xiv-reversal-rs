@@ -1,10 +1,14 @@
 // Dependencies
 
-use process::Process;
-use d3d11::{Device, Renderer, Shaders};
+use crate::{
+	process::Process,
+	d3d11::{Device, Renderer, Shaders}
+};
 
-use std::include_str;
-use std::ffi::CString;
+use std::{
+	include_str,
+	ffi::CString
+};
 
 use winapi::{
 	um::d3d11::{

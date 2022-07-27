@@ -1,14 +1,15 @@
 // Dependencies
 
-use Ktisis;
-
-use process::{
-	Process,
-	memory::Hooks
-};
-use render::{
-	Overlay,
-	d3d11::Device
+use crate::{
+	Ktisis,
+	process::{
+		Process,
+		memory::Hooks
+	},
+	render::{
+		Overlay,
+		d3d11::Device
+	}
 };
 
 use std::mem::transmute;

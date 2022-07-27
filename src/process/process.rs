@@ -1,5 +1,10 @@
 // Dependencies
 
+use crate::{
+	process::Module,
+	memory::MemRegion
+};
+
 use std::{
 	mem,
 	ptr::null,
@@ -26,9 +31,6 @@ use winapi::um::{
 	handleapi::INVALID_HANDLE_VALUE,
 	winnt::HANDLE
 };
-
-use process::Module;
-use memory::MemRegion;
 
 // Process
 

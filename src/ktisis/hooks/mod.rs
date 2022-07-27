@@ -4,8 +4,8 @@ mod present;
 
 // Init
 
-use Ktisis;
+use crate::Ktisis;
 
 pub fn init(ktisis: &mut Ktisis) {
-	self::present::init(ktisis);
+	present::init(ktisis);
 }

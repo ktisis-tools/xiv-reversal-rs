@@ -1,12 +1,14 @@
 // Dependencies
 
-use process::{
-	Process,
-	memory::Hooks
+use crate::{
+	process::{
+		Process,
+		memory::Hooks
+	},
+	render::Overlay,
+	ktisis::hooks,
+	GameInterface
 };
-use render::Overlay;
-use ktisis::hooks;
-use GameInterface;
 
 // Ktisis
 

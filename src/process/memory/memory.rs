@@ -2,7 +2,7 @@
 
 use std::ffi::c_void;
 
-use memory::SigScanner;
+use crate::memory::SigScanner;
 
 // MemRegion
 

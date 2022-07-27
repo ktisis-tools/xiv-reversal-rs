@@ -1,5 +1,6 @@
 // Dependencies
 
+use libc::c_void;
 use std::ffi::CString;
 
 use winapi::{
@@ -10,9 +11,7 @@ use winapi::{
 	}
 };
 
-use libc::c_void;
-
-use memory::MemRegion;
+use crate::memory::MemRegion;
 
 // Module
 

@@ -1,10 +1,11 @@
 // Dependencies
 
+use crate::{
+	memory::{MemRegion, VTable},
+	process::Process
+};
+
 use libc::c_void;
-
-use memory::{MemRegion, VTable};
-use process::Process;
-
 use std::ptr::null_mut;
 
 use winapi::{

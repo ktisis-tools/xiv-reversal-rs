@@ -3,13 +3,13 @@ pub use self::actor::Actor;
 
 // ActorTable
 
-use null_mut;
 use std::{
 	ffi::c_void,
-	mem::size_of
+	mem::size_of,
+	ptr::null_mut
 };
 
-use memory::MemRegion;
+use crate::memory::MemRegion;
 
 const ACTOR_TABLE_SIZE: u32 = 424;
 const GPOSE_INDEX: u32 = 201;
@@ -38,6 +38,7 @@ impl ActorTable {
 				unsafe {
 					let ptr = *(self.handle.add(i as usize * size) as *mut *mut c_void);
 					if !ptr.is_null() {
+						//result.push( &mut *(ptr as *mut Actor) );
 						result.push( Actor::new(i, ptr) );
 					}
 				}

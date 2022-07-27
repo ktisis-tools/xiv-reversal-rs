@@ -1,7 +1,9 @@
 // Dependencies
 
-use Vertex;
-use BufferObject;
+use crate::{
+	Vertex,
+	BufferObject
+};
 
 use winapi::um::d3d11::{
 	ID3D11Device,

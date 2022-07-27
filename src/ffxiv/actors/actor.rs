@@ -1,13 +1,17 @@
 // Dependencies
 
-use std::ffi::c_void;
+use crate::memory::MemRegion;
+
+use std::{
+	ffi::c_void,
+	mem::size_of
+};
 
 // Actor
 
-#[derive(Debug)]
 pub struct Actor {
 	index: u32,
-	pub handle: *mut c_void
+	handle: *mut c_void
 }
 
 impl Actor {
