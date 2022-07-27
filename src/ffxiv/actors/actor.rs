@@ -54,7 +54,13 @@ pub struct Actor {
 	#[field(offset = 0x8c, get, set)]
 	pub actor_type: ActorType,
 	#[field(offset = 0x104, get, set)]
-	pub render_mode: RenderMode
+	pub render_mode: RenderMode,
+
+	#[field(offset = 0xb4, get, set)]
+	pub scale: f32,
+
+	#[field(offset = 0xf0, get, set)] // TODO: ptr
+	pub model: *mut ActorModel
 }
 
 impl Actor {

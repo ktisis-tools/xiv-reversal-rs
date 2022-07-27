@@ -29,6 +29,8 @@ impl GameInterface {
 		let mut actor = &mut self.actor_table.get_all()[0];
 		println!("{:x?}", *actor as *const _ as *const usize);
 		println!("{:#x?}", actor);
+		actor.set_scale(1.0);
 		actor.redraw_sync();
+		println!("{:?}", actor.scale());
 	}
 }

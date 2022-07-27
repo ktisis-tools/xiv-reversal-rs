@@ -36,6 +36,10 @@ pub enum ModelDataPath {
 
 // ActorModel
 
-pub struct ActorModel {}
+#[struct_layout::explicit(size = 0x93c, align = 4)]
+#[derive(Copy, Clone, Debug)]
+pub struct ActorModel {
+
+}
 
 impl ActorModel {}
