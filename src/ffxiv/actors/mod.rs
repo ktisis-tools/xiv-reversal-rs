@@ -1,3 +1,6 @@
+mod skeleton;
+pub use self::skeleton::{SkeletonArray};
+
 mod model;
 pub use self::model::{ActorModel, ModelDataPath};
 
@@ -41,6 +44,7 @@ impl ActorTable {
 				unsafe {
 					let ptr = *(self.handle.add(i as usize * size) as *mut *mut c_void);
 					if !ptr.is_null() {
+						println!("{i} {:x?}", ptr);
 						result.push( &mut *(ptr as *mut Actor) );
 					}
 				}

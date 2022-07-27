@@ -2,6 +2,8 @@
 
 use crate::Vec3;
 
+use super::skeleton::SkeletonArray;
+
 use std::ffi::c_void;
 
 // Enums
@@ -42,6 +44,8 @@ pub enum ModelDataPath {
 #[struct_layout::explicit(size = 0x93c, align = 4)]
 #[derive(Copy, Clone, Debug)]
 pub struct ActorModel {
+	#[field(offset = 0xa0, get, set)]
+	pub skeleton: *mut SkeletonArray,
 	#[field(offset = 0x148, get, set)]
 	pub bust: *mut BustScale,
 	#[field(offset = 0x26c, get, set)]
@@ -55,6 +59,10 @@ pub struct ActorModel {
 }
 
 impl ActorModel {
+	pub fn get_skeleton(&self) -> &mut SkeletonArray {
+		unsafe { &mut *self.skeleton() }
+	}
+
 	pub fn get_bust(&self) -> &mut BustScale {
 		unsafe { &mut *self.bust() }
 	}
@@ -66,5 +74,5 @@ impl ActorModel {
 #[derive(Copy, Clone, Debug)]
 pub struct BustScale {
 	#[field(offset = 0x68, get, set)]
-	scale: Vec3
+	pub scale: Vec3
 }

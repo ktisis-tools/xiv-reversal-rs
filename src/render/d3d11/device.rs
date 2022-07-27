@@ -19,6 +19,8 @@ use winapi::{
 // Device
 // https://github.com/aers/FFXIVClientStructs/blob/main/FFXIVClientStructs/FFXIV/Client/Graphics/Kernel/Device.cs
 
+// TODO: Implement struct_layout
+
 #[repr(u16)]
 enum _Offset {
 	IDXGISwapChain = 0x58,
