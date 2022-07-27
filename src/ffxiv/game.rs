@@ -7,8 +7,7 @@ use std::{
 
 use crate::{
 	ActorTable,
-	Process,
-	memory::MemRegion
+	Process
 };
 
 // Game Interface
@@ -27,6 +26,9 @@ impl GameInterface {
 	pub fn init(&mut self, process: &Process) {
 		self.actor_table.find(&process.memory);
 
-		let mut actor = &mut self.actor_table.get_all();
+		let mut actor = &mut self.actor_table.get_all()[0];
+		println!("{:x?}", *actor as *const _ as *const usize);
+		println!("{:#x?}", actor);
+		actor.redraw_sync();
 	}
 }

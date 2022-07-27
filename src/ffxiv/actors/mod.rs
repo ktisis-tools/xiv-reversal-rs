@@ -1,5 +1,8 @@
+mod model;
+pub use self::model::{ActorModel, ModelDataPath};
+
 mod actor;
-pub use self::actor::Actor;
+pub use self::actor::{Actor, ActorType, RenderMode};
 
 // ActorTable
 
@@ -30,7 +33,7 @@ impl ActorTable {
 		self.handle = handle;
 	}
 
-	pub fn get_all(&self) -> Vec<Actor> {
+	pub fn get_all(&self) -> Vec<&mut Actor> {
 		let mut result = vec![];
 		if !self.handle.is_null() {
 			let size = size_of::<usize>();
@@ -38,8 +41,7 @@ impl ActorTable {
 				unsafe {
 					let ptr = *(self.handle.add(i as usize * size) as *mut *mut c_void);
 					if !ptr.is_null() {
-						//result.push( &mut *(ptr as *mut Actor) );
-						result.push( Actor::new(i, ptr) );
+						result.push( &mut *(ptr as *mut Actor) );
 					}
 				}
 			}

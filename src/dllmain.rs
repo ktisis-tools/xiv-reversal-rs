@@ -1,10 +1,12 @@
 // Modules & Crates
 
+mod structs;
 mod process;
 mod render;
 mod ffxiv;
 mod ktisis;
 use {
+	structs::*,
 	process::*,
 	render::*,
 	ffxiv::*,
