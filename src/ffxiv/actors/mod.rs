@@ -42,10 +42,10 @@ impl ActorTable {
 			let size = size_of::<usize>();
 			for i in 0 .. ACTOR_TABLE_SIZE {
 				unsafe {
-					let ptr = *(self.handle.add(i as usize * size) as *mut *mut c_void);
+					let ptr = *(self.handle.add(i as usize * size) as *mut *mut Actor);
 					if !ptr.is_null() {
 						println!("{i} {:x?}", ptr);
-						result.push( &mut *(ptr as *mut Actor) );
+						result.push( &mut *ptr );
 					}
 				}
 			}

@@ -28,5 +28,9 @@ impl GameInterface {
 
 	pub fn init(&mut self, process: &Process) {
 		self.actor_table.find(&process.memory);
+
+		self.actor_table.get_all();
+
+		let mut actor = &mut self.actor_table.get_all()[3];
 	}
 }
