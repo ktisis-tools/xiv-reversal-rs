@@ -35,7 +35,7 @@ unsafe extern "stdcall" fn present(
 ) -> HRESULT {
 	if let Some(ktisis) = KTISIS {
 		let ktisis = &mut *ktisis;
-		ktisis.overlay.draw();
+		//ktisis.overlay.draw();
 	};
 	
 	if let Some(call) = &ORIGIN {

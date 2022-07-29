@@ -12,7 +12,7 @@ use std::{
 	time::SystemTime
 };
 
-use imgui::Context;
+use imgui::{Ui, Context};
 use imgui_dx11_renderer::Renderer;
 
 use winapi::{
@@ -95,7 +95,7 @@ impl Overlay {
 
 	// Draw
 
-	pub fn draw(&mut self) {
+	pub fn begin_draw(&mut self) -> OverlayDrawContext {
 		// Setup renderer
 
 		let devcon = self.device.get_context();
@@ -106,8 +106,8 @@ impl Overlay {
 
 		// Calculate delta time
 
-		let now = SystemTime::now();
-		let delta_time = now.duration_since(self.last_draw).unwrap().as_nanos() as f32 / 1_000_000_000.0;
+		let start = SystemTime::now();
+		let delta_time = start.duration_since(self.last_draw).unwrap().as_nanos() as f32 / 1_000_000_000.0;
 
 		self.imgui.io_mut().delta_time = delta_time;
 		
@@ -115,14 +115,21 @@ impl Overlay {
 
 		let ui = self.imgui.frame();
 
-		{
-			let draw_list = ui.get_foreground_draw_list();
-
-			// TODO: Draw something
+		OverlayDrawContext {
+			ui,
+			start
 		}
-
-		self.renderer.render( ui.render() ).expect("Imgui frame failed.");
-
-		self.last_draw = now;
 	}
+
+	pub fn end_draw(&mut self, ctx: OverlayDrawContext) {
+		self.renderer.render( ctx.ui.render() ).expect("Imgui draw failed.");
+		self.last_draw = ctx.start;
+	}
+}
+
+// OverlayDrawContext
+
+pub struct OverlayDrawContext<'a> {
+	ui: Ui<'a>,
+	start: SystemTime
 }
