@@ -8,7 +8,7 @@ The end goal is to expand the features of FFXIV's Group Pose mode and provide a 
 If you're interested in reaching out about this project, please feel free to contact me on Discord at chirp#1337.
 
 #### List of target features, in order of complexity (ascending):
-- [ ] 2D overlay
+- [/] 2D overlay
 - [ ] Free camera movement
 - [ ] Save and load different camera settings
 - [ ] User workspace UI
@@ -25,7 +25,7 @@ As a note, I'm fully aware that this project, at least in its current scope, can
 
 Additionally, due to some unknown funkiness, the DLL injector will only work with an instance of the game launched via [XIVQuickLauncher](https://github.com/goatcorp/FFXIVQuickLauncher). I'm not sure why, and haven't yet looked in-depth to find out why.
 
-Finally, this tool is not intended to be a competitor to CMTool or Anamnesis. My focus is not to replicate the functionality of either, but to instead fill its own niche, whatever that may be.
+Finally, this tool is not intended to be a replacement for CMTool or Anamnesis. My focus is not to replicate the functionality of either, but to instead fill its own niche, whatever that may be.
 
 ## Acknowledgements
 
