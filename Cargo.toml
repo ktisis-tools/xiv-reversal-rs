@@ -14,9 +14,12 @@ path = "src/exe/main.rs"
 
 [dependencies]
 winapi = { version = "^0.3.9", features = ["std", "everything"] }
+windows = { version = "0.36", features = ["Win32_Graphics_Direct3D11", "Win32_Graphics_Direct3D"] }
 libc = { version = "^0.2.126", features = ["use_std", "extra_traits"] }
 dll-syringe = { version = "^0.13.1", features = ["into-x86-from-x64"] }
 async-std = "^1.12.0"
 directx_math = "^0.2.2"
 futures = "0.3"
 struct_layout = "0.1"
+imgui = "^0.8.0"
+imgui-dx11-renderer = "^0.8.0"

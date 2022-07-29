@@ -34,9 +34,9 @@ unsafe extern "stdcall" fn present(
 	flags: u32
 ) -> HRESULT {
 	if let Some(ktisis) = KTISIS {
-		let ktisis = &*ktisis;
+		let ktisis = &mut *ktisis;
 		ktisis.overlay.draw();
-	}
+	};
 	
 	if let Some(call) = &ORIGIN {
 		call(swap_chain, sync_interval, flags)
@@ -47,7 +47,7 @@ unsafe extern "stdcall" fn present(
 
 pub fn init(ktisis: &mut Ktisis) {
 	let device = Device::from(&ktisis.process);
-	let dev = device.get_device();
+	let dev = device.device();
 
 	let sc_vt = device.get_swapchain_vt();
 

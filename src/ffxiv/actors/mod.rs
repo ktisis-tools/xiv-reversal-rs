@@ -44,7 +44,6 @@ impl ActorTable {
 				unsafe {
 					let ptr = *(self.handle.add(i as usize * size) as *mut *mut Actor);
 					if !ptr.is_null() {
-						println!("{i} {:x?}", ptr);
 						result.push( &mut *ptr );
 					}
 				}

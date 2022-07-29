@@ -1,91 +1,128 @@
 // Dependencies
 
 use crate::{
-	process::Process,
-	d3d11::{Device, Renderer, Shaders}
+	Process,
+	d3d11::Device
 };
 
 use std::{
-	include_str,
-	ffi::CString
+	mem::{transmute, zeroed},
+	ptr::null_mut,
+	ffi::c_void,
+	time::SystemTime
 };
+
+use imgui::Context;
+use imgui_dx11_renderer::Renderer;
 
 use winapi::{
+	Interface,
 	um::d3d11::{
-		D3D11_INPUT_ELEMENT_DESC,
-		D3D11_INPUT_PER_VERTEX_DATA,
-		D3D11_APPEND_ALIGNED_ELEMENT
-	},
-	shared::dxgiformat::{
-		//DXGI_FORMAT_R32_UINT, // keep note of this.
-		DXGI_FORMAT_R32G32B32A32_FLOAT,
-		DXGI_FORMAT_R32G32B32_FLOAT
+		ID3D11Device,
+		ID3D11RenderTargetView,
+		ID3D11Texture2D,
+		D3D11_VIEWPORT
 	}
 };
-
-// Shader code
-
-const SHADER: &'static str = include_str!("./hlsl/shader.hlsl");
 
 // Overlay
 
 pub struct Overlay {
-	pub renderer: Renderer
+	device: Device,
+
+	imgui: Context,
+	renderer: Renderer,
+
+	viewport: D3D11_VIEWPORT,
+	rtv: *mut ID3D11RenderTargetView,
+
+	last_draw: SystemTime
 }
 
 impl Overlay {
 	// Constructor
 
 	pub fn new(process: &Process) -> Self {
-		let device = Device::from(&process);
-		let renderer = Renderer::from(device);
-		Self { renderer }
+		// DX11
+
+		let device = Device::from(process);
+		let sc = unsafe { *device.swapchain() };
+
+		// Imgui
+
+		let d3d11_device = unsafe { transmute::<&ID3D11Device, _>( // this is fucking stupid
+			&*device.device()
+		) };
+
+		let mut imgui = Context::create();
+		imgui.io_mut().display_size = [sc.width() as f32, sc.height() as f32];
+
+		let renderer = unsafe { Renderer::new(&mut imgui, &d3d11_device).expect("Imgui renderer creation failed.") }; // why is this unsafe
+
+		// Construct
+
+		let viewport = unsafe { zeroed() };
+		let rtv = null_mut();
+
+		let last_draw = SystemTime::now();
+
+		Self {
+			device,
+
+			imgui,
+			renderer,
+			
+			viewport,
+			rtv,
+
+			last_draw
+		}
 	}
 
 	// Init
 
-	pub fn init(&mut self) { // could use direct2d?
-		// Init renderer
+	pub fn init(&mut self) {
+		let dev = self.device;
 
-		let mut r = self.renderer.init();
+		let mut back_buf: *mut c_void = null_mut();
+		unsafe {
+			dev.get_context().RSGetViewports(&mut 1, &mut self.viewport);
 
-		// Declared here to extend their lifetime for compilation. Not ideal, revisit this.
-		let cpos = CString::new("POSITION").unwrap();
-		let ccol = CString::new("COLOR").unwrap();
-
-		// Build input layout
-
-		let v_input = vec![
-			D3D11_INPUT_ELEMENT_DESC {
-				SemanticName: cpos.as_ptr(),
-				SemanticIndex: 0,
-				Format: DXGI_FORMAT_R32G32B32_FLOAT,
-				InputSlot: 0,
-				AlignedByteOffset: 0,
-				InputSlotClass: D3D11_INPUT_PER_VERTEX_DATA,
-				InstanceDataStepRate: 0
-			},
-			D3D11_INPUT_ELEMENT_DESC {
-				SemanticName: ccol.as_ptr(),
-				SemanticIndex: 0,
-				Format: DXGI_FORMAT_R32G32B32A32_FLOAT,
-				InputSlot: 0,
-				AlignedByteOffset: D3D11_APPEND_ALIGNED_ELEMENT,
-				InputSlotClass: D3D11_INPUT_PER_VERTEX_DATA,
-				InstanceDataStepRate: 0
-			}
-		];
-
-		// Compile shaders
-
-		r.shaders = Some(unsafe {
-			Shaders::from_src(&*r.device, SHADER, Some("VS"), Some("PS"), v_input)
-		});
+			dev.get_swapchain().GetBuffer(0, &ID3D11Texture2D::uuidof(), &mut back_buf);
+			dev.get_device().CreateRenderTargetView(back_buf as _, null_mut(), &mut self.rtv);
+		}
 	}
 
 	// Draw
 
-	pub fn draw(&self) {
-		unsafe { self.renderer.render(); }
+	pub fn draw(&mut self) {
+		// Setup renderer
+
+		let devcon = self.device.get_context();
+		unsafe {
+			devcon.OMSetRenderTargets(1, &self.rtv, null_mut());
+			devcon.RSSetViewports(1, &mut self.viewport);
+		}
+
+		// Calculate delta time
+
+		let now = SystemTime::now();
+		let delta_time = now.duration_since(self.last_draw).unwrap().as_nanos() as f32 / 1_000_000_000.0;
+
+		self.imgui.io_mut().delta_time = delta_time;
+		
+		// Draw frame
+
+		let ui = self.imgui.frame();
+
+		{
+			let draw_list = ui.get_foreground_draw_list();
+
+			// TODO: Draw something
+		}
+
+		self.renderer.render( ui.render() ).expect("Imgui frame failed.");
+
+		self.last_draw = now;
 	}
 }
