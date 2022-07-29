@@ -8,7 +8,7 @@ The end goal is to expand the features of FFXIV's Group Pose mode and provide a 
 If you're interested in reaching out about this project, please feel free to contact me on Discord at chirp#1337.
 
 #### List of target features, in order of complexity (ascending):
-- [/] 2D overlay
+- [x] 2D overlay
 - [ ] Free camera movement
 - [ ] Save and load different camera settings
 - [ ] User workspace UI
