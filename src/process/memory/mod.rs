@@ -1,8 +1,11 @@
-mod memory;
-pub use self::memory::MemRegion;
+mod helpers;
+pub use self::helpers::*;
 
-mod scanner;
-pub use self::scanner::SigScanner;
+mod memregion;
+pub use self::memregion::MemRegion;
+
+mod sigscanner;
+pub use self::sigscanner::SigScanner;
 
 mod hooks;
 pub use self::hooks::{Hooks, VHook};

@@ -1,7 +1,7 @@
-use crate::{
-	Vec2,
-	memory::MemRegion
-};
+// Module
+
+mod worldmatrix;
+pub use worldmatrix::{WorldMatrix, WorldMatrixFn};
 
 // Camera
 

@@ -36,6 +36,7 @@ pub struct Overlay {
 	viewport: D3D11_VIEWPORT,
 	rtv: *mut ID3D11RenderTargetView,
 
+	start_draw: SystemTime,
 	last_draw: SystemTime
 }
 
@@ -64,6 +65,7 @@ impl Overlay {
 		let viewport = unsafe { zeroed() };
 		let rtv = null_mut();
 
+		let start_draw = SystemTime::now();
 		let last_draw = SystemTime::now();
 
 		Self {
@@ -75,6 +77,7 @@ impl Overlay {
 			viewport,
 			rtv,
 
+			start_draw,
 			last_draw
 		}
 	}
@@ -95,7 +98,7 @@ impl Overlay {
 
 	// Draw
 
-	pub fn begin_draw(&mut self) -> OverlayDrawContext {
+	pub fn draw(&mut self, f: &dyn Fn(&Ui)) {
 		// Setup renderer
 
 		let devcon = self.device.get_context();
@@ -113,23 +116,18 @@ impl Overlay {
 		
 		// Draw frame
 
-		let ui = self.imgui.frame();
+		self.start_draw = SystemTime::now();
 
-		OverlayDrawContext {
-			ui,
-			start
-		}
+		// Call closure
+
+		let frame = self.imgui.frame();
+		f(&frame);
+
+		// Finish draw
+
+		let render = frame.render();
+		self.renderer.render(render).expect("Imgui draw failed.");
+
+		self.last_draw = self.start_draw;
 	}
-
-	pub fn end_draw(&mut self, ctx: OverlayDrawContext) {
-		self.renderer.render( ctx.ui.render() ).expect("Imgui draw failed.");
-		self.last_draw = ctx.start;
-	}
-}
-
-// OverlayDrawContext
-
-pub struct OverlayDrawContext<'a> {
-	ui: Ui<'a>,
-	start: SystemTime
 }

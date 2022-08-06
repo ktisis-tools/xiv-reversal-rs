@@ -4,8 +4,6 @@ use crate::Vec3;
 
 use super::skeleton::SkeletonArray;
 
-use std::ffi::c_void;
-
 // Enums
 
 #[repr(u16)]
@@ -59,13 +57,8 @@ pub struct ActorModel {
 }
 
 impl ActorModel {
-	pub fn get_skeleton(&self) -> &mut SkeletonArray {
-		unsafe { &mut *self.skeleton() }
-	}
-
-	pub fn get_bust(&self) -> &mut BustScale {
-		unsafe { &mut *self.bust() }
-	}
+	pub fn get_skeleton(&self) -> &mut SkeletonArray { unsafe { &mut *self.skeleton() } }
+	pub fn get_bust(&self) -> &mut BustScale { unsafe { &mut *self.bust() } }
 }
 
 // BustScale

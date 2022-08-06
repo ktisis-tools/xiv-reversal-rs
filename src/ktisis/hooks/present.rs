@@ -2,14 +2,7 @@
 
 use crate::{
 	Ktisis,
-	process::{
-		Process,
-		memory::Hooks
-	},
-	render::{
-		Overlay,
-		d3d11::Device
-	}
+	render::d3d11::Device
 };
 
 use std::mem::transmute;
@@ -34,8 +27,62 @@ unsafe extern "stdcall" fn present(
 	flags: u32
 ) -> HRESULT {
 	if let Some(ktisis) = KTISIS {
-		let ktisis = &mut *ktisis;
-		//ktisis.overlay.draw();
+		/*let ktisis = &mut *ktisis;
+
+		let matrix = ktisis.game.get_world_matrix();
+
+		ktisis.overlay.draw(&|ui: &Ui| {
+			let draw = ui.get_foreground_draw_list();
+
+			//let player = &ktisis.game.actor_table.get_all()[0];
+			for player in &ktisis.game.actor_table.get_all() {
+				let mut pl_pos = player.position();
+
+				if player.model().is_null() {
+					continue;
+				}
+
+				let model = player.get_model();
+
+				let skeletons = model.get_skeleton().get_vec();
+
+				for skeleton in skeletons {
+					for pose in skeleton.poses() {
+						if pose.is_null() { continue; }
+						let mut pose = unsafe { *pose };
+		
+						let skelly = pose.get_skeleton();
+		
+						let mut transforms = pose.transforms();
+						let mut trans_vec = transforms.get_vec();
+		
+						let mut i = 0;
+						for bone in skelly.bones().get_vec() {
+							let mut trans = &mut trans_vec[i];
+		
+							let name = bone.get_name();
+							if name == "j_kosi" {
+								let mut translate = trans.translate();
+
+								pl_pos.x += translate.x;
+								pl_pos.y += translate.y;
+								pl_pos.z += translate.z;
+
+								for radius in 1 .. 10 {
+									draw.add_circle(
+										matrix.world_to_screen(pl_pos).to_vec(),
+										radius as f32,
+										[1.0, 1.0, 1.0]
+									).build();
+								}
+							}
+		
+							i += 1;
+						}
+					}
+				}
+			}
+		});*/
 	};
 	
 	if let Some(call) = &ORIGIN {
@@ -47,7 +94,6 @@ unsafe extern "stdcall" fn present(
 
 pub fn init(ktisis: &mut Ktisis) {
 	let device = Device::from(&ktisis.process);
-	let dev = device.device();
 
 	let sc_vt = device.get_swapchain_vt();
 

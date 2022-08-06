@@ -11,6 +11,10 @@ impl Vec2 {
 	pub fn new(x: f32, y: f32) -> Self {
 		Self { x, y }
 	}
+
+	pub fn to_vec(&self) -> [f32; 2] {
+		[self.x, self.y]
+	}
 }
 
 #[derive(Copy, Clone, Debug, Default)]

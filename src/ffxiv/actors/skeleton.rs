@@ -3,7 +3,7 @@
 use crate::Vec4;
 
 use std::ffi::CStr;
-use libc::{c_char, c_void};
+use libc::c_char;
 
 // Consts
 
@@ -102,6 +102,7 @@ impl TransformArray {
 	pub fn get_vec(&self) -> Vec<&mut Transform> {
 		let ct = self.count() as usize;
 		let mut vec = Vec::with_capacity(ct);
+		//println!("0x{:x?}", unsafe { self.handle() });
 		for i in 0 .. ct {
 			vec.push( unsafe { &mut *(self.handle().add(i)) } );
 		}
@@ -111,12 +112,15 @@ impl TransformArray {
 
 // Transform
 
+#[struct_layout::explicit(size = 0x30, align = 4)]
 #[derive(Copy, Clone, Debug)]
-#[repr(C)]
 pub struct Transform {
-	translate: Vec4,
-	rotate: Vec4,
-	scale: Vec4
+	#[field(offset = 0x0, get, set)]
+	pub translate: Vec4,
+	#[field(offset = 0x10, get, set)]
+	pub rotate: Vec4,
+	#[field(offset = 0x20, get, set)]
+	pub scale: Vec4
 }
 
 // HkaSkeleton
@@ -195,4 +199,19 @@ impl ParentArray {
 		}
 		vec
 	}
+}
+
+// fucking hell
+
+#[struct_layout::explicit(size = 0x10, align = 4)]
+#[derive(Copy, Clone, Debug)]
+pub struct HkVec4 {
+	#[field(offset = 0x0, get, set)]
+	pub x: f32,
+	#[field(offset = 0x4, get, set)]
+	pub y: f32,
+	#[field(offset = 0x8, get, set)]
+	pub z: f32,
+	#[field(offset = 0xc, get, set)]
+	pub w: f32
 }

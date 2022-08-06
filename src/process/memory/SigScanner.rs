@@ -106,4 +106,32 @@ impl SigScanResult {
 			self.ptr.add(asm_ptr as usize + offset*2 + 1)
 		}
 	}
+
+	pub fn delegate(&self) -> *mut c_void {
+		// Get ptr offset
+		// TODO: DRY Code
+
+		let mut offset = 0;
+		let mut found = false;
+		for (i, byte) in self.query.iter().enumerate() {
+			if byte.is_none() {
+				offset = i;
+				found = true;
+				break;
+			}
+		}
+
+		if !found {
+			println!("Ptr offset not found in query: {:?}", self.query);
+			return null_mut();
+		}
+
+		// Resolve delegate
+
+		unsafe {
+			let ptr = *(self.ptr.add(offset) as *const u32);
+			println!("{:x?} - ~{:x?} + 4", self.ptr, ptr);
+			self.ptr.sub(!ptr as usize).add(0x4)
+		}
+	}
 }

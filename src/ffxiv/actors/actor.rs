@@ -1,8 +1,8 @@
 // Dependencies
 
 use crate::{
-	memory::MemRegion,
-	ActorModel
+	ActorModel,
+	Vec3
 };
 
 use std::{
@@ -50,9 +50,13 @@ pub enum ActorType {
 #[derive(Copy, Clone, Debug)]
 pub struct Actor {
 	#[field(offset = 0x30, get, set)]
-	pub name_bytes: [u8; 64], // assuming 64 bytes, probably incorrect?
+	pub name_bytes: [u8; 64], // assuming 64 bytes, possibly incorrect?
 	#[field(offset = 0x8c, get, set)]
 	pub actor_type: ActorType,
+
+	#[field(offset = 0xa0, get, set)]
+	pub position: Vec3,
+
 	#[field(offset = 0x104, get, set)]
 	pub render_mode: RenderMode,
 
@@ -64,9 +68,7 @@ pub struct Actor {
 }
 
 impl Actor {
-	pub fn get_model(&self) -> &mut ActorModel {
-		unsafe { &mut *self.model() }
-	}
+	pub fn get_model(&self) -> &mut ActorModel { unsafe { &mut *self.model() } }
 
 	// Get name
 

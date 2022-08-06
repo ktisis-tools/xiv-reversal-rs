@@ -2,7 +2,7 @@ mod actors;
 pub use self::actors::*;
 
 mod camera;
-pub use self::camera::Camera;
+pub use self::camera::*;
 
-mod game;
-pub use self::game::GameInterface;
+mod gameinterface;
+pub use self::gameinterface::*;
